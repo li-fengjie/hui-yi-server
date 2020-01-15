@@ -1,0 +1,146 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="__HUI__/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="__HUIADMIN__/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="__HUILIB__/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="__HUIADMIN__/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="__HUIADMIN__/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>用户管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户中心 <span class="c-gray en">&gt;</span> 用户管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+		<form method="post" action="{:url('admin/User/searchUser')}">
+		<input type="text" class="input-text" style="width:250px" placeholder="输入会员名称、电话、账号" id="" name="infor">
+		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+	</form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">  <span class="r">共有数据：<strong>{$data.count}</strong> 条</span> </div>
+	<div class="mt-20">
+
+	<table class="table table-border table-bordered table-hover table-bg table-sort">
+		<thead>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""></th>
+				<th width="130">账号</th>
+				<th width="80">用户头像</th>
+				<th width="100">用户名</th>
+				<th width="40">用户类型</th>
+				<th width="90">所在企业</th>
+				<th width="150">电话</th>
+				<th width="70">状态</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			{volist name="data.userData" id="vo"}
+
+			<tr class="text-c">
+				<td><input type="checkbox" value="{$vo.uid}" name="uid"></td>
+				<td>{$vo.uid}</td>
+				<td><img width="60" class="product-thumb" src='{$vo.uphoto===""?"":$vo.uphoto}'></td>
+				<td><u style="cursor:pointer" class="text-primary" onclick="member_show('张三','member-show.html','10001','360','400')">{$vo.uname}</u></td>
+				<td>{$vo.user_type===1?"普通用户":"管理员"}</td>
+				<td>{$vo.bname}</td>
+				<td>{$vo.uphone}</td>
+				<td class="td-status"><span class="label {$vo.isuse==1?'label-success':'label-defaunt'} radius">{$vo.isuse==1?"已启用":"已停用"}</span></td>
+				<td class="td-manage"><a style="text-decoration:none" onClick="dosth(this,'{$vo.uid}','{$vo.isuse}')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <!-- <a title="编辑" href="javascript:;" onclick="member_edit('编辑','member-add.html','4','','510')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="change_password('修改密码','change-password.html','10001','600','270')" href="javascript:;" title="修改密码"><i class="Hui-iconfont">&#xe63f;</i></a>  --></td>
+			</tr>
+
+			{/volist}
+
+		</tbody>
+	</table>
+	</div>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__HUILIB__/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__HUILIB__/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__HUI__/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__HUIADMIN__/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__HUILIB__/My97DatePicker/4.8/WdatePicker.js"></script>
+<!-- <script type="text/javascript" src="__HUILIB__/datatables/1.10.0/jquery.dataTables.min.js"></script> -->
+<script type="text/javascript" src="__HUILIB__/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+var dosth=function(obj,id,isUse){
+
+	var bool=[true,false];
+	if(bool[isUse]){
+		member_start(obj,id,1);
+	}else{
+		member_stop(obj,id,0);
+	}
+}
+
+/*用户-停用  url: '<?php echo url('admin/User/UsersUse')?>',*/
+function member_stop(obj,id,isUse){
+	layer.confirm('确认要停用吗？',{icon: 3, title:'提示'},function(index){
+
+		$.ajax({
+			type: 'POST',
+			url: '<?php echo url('admin/User/UserIsUse')?>',
+			dataType: 'text',
+			data:{'uid':id,'isUse':isUse},
+			success:function(data,XMLHttpRequest,textStatus,errorThroen){
+
+				$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none"  onClick="dosth(this,\'{$vo.uid}\','+isUse+')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+				$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+				$(obj).remove();
+				layer.msg('已停用!',{icon: 6,time:1000});
+			},
+			error:function(data) {
+				alert(XMLHttpRequest.status);
+				layer.msg(data,{icon: 5,time:1000});
+			},
+		});
+	},function(){});
+
+}
+
+/*用户-启用*/
+function member_start(obj,id,isUse){
+	layer.confirm('确认要启用吗？',{icon: 3, title:'提示'},function(index){
+
+
+		$.ajax({
+			type: 'post',
+			url: '<?php echo url('admin/User/UserIsUse');?>',
+			data:{'uid':id,'isUse':isUse},
+			dataType: 'text',
+			success: function(data){
+				$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="dosth(this,\'{$vo.uid}\','+isUse+')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>');
+				$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+				$(obj).remove();
+				layer.msg('已启用!',{icon: 6,time:1000});
+
+			
+			},
+			error:function(data) {
+				layer.msg(data,{icon: 5,time:1000});
+			},
+		});
+	});
+}
+</script>
+</body>
+</html>

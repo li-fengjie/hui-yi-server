@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <title></title>
+  <style media="screen">
+    #meetContent{
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+     }
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color:rgb(67,67,67);
+      font-family:'微软雅黑';
+    }
+    a{
+      text-decoration: none;
+      color:rgba(6, 168,158);
+      margin-right:5%;
+     }
+    #pictureBox{
+      margin-top:5%;
+      width:90%;
+      height: 200px;
+      margin-left: 5%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #relPicture{
+      width:100%;
+      height:200px;
+
+    }
+    #loading{
+      width:18px;
+      height:18px;
+
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="meetContent">
+    <article>
+      <h1 style="width:90%;margin-left:5%; margin-top:7%">{$meetContent.mtitle}</h1>
+      <div class="ContentInfo" style="width:90%;margin-left:5%;margin-top:5%"><span class="address">{$meetContent.maddress}</span>&nbsp;&nbsp;<span class="author">{$meetContent.uname}</span>
+      </div>
+      <div id="pictureBox">
+          <img src="{$meetContent.mimage}" alt="" style="display:none" id="relPicture">
+          <img src="__HUI__/images/loading/loading-s.gif" id="loadding">
+      </div>
+      <div class="content" style="width:90%;margin-left:5%;margin-top:5%">
+
+        <div>
+          <!-- <a href="javascript:void(0)" id="showContent">展开会议内容</a> -->
+        <pre >{$meetContent.mcontent}
+        </pre>
+      </div>
+      </div>
+    </article>
+  </div>
+</body>
+<script type="text/javascript" src="__HUILIB__/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $('#relPicture').load(function(){
+      $("#loadding").hide();
+      $("#relPicture").show();
+    })
+
+</script>
+</html>

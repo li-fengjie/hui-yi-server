@@ -1,0 +1,102 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="http://libs.useso.com/js/html5shiv/3.7/html5shiv.min.js"></script>
+<script type="text/javascript" src="http://libs.useso.com/js/respond.js/1.4.2/respond.min.js"></script>
+<script type="text/javascript" src="http://cdn.bootcss.com/css3pie/2.0beta1/PIE_IE678.js"></script>
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="__HUI__/css/H-ui.css"/>
+<link type="text/css" rel="stylesheet" href="__HUIADMIN__/css/H-ui.admin.css"/>
+<!--<link type="text/css" rel="stylesheet" href="__HUILIB__/font/font-awesome.min.css"/>
+<!--[if IE 7]>
+<link href="http://www.bootcss.com/p/font-awesome/assets/css/font-awesome-ie7.min.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+<title>添加企业</title>
+</head>
+<body>
+<div class="pd-20">
+  <form class="Huiform" id="form" action="" method="post">
+    <table class="table table-border table-bordered table-bg">
+      <thead>
+        <tr>
+          <th colspan="2">添加企业</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th class="text-r" width="30%">企业名:</th>
+          <td><input name="bname" id="oldpassword" class="input-text" type="text" autocomplete="off" placeholder="企业名称" >
+          </td>
+        </tr>
+        <tr>
+          <th class="text-r">授权码:</th>
+          <td><input name="pcode" id="code" class="input-text" type="text" autocomplete="off" placeholder="授权码"  >
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" Id="promptInfo"><a href="javascript:;" onclick="code_generate('添加企业','{:url('admin/Enterprise/generateCode')}')" style="margin-left:170px" class="btn btn-primary radius"></i> 生成</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="btn btn-success radius" onclick="submit()" style="margin-left:100px" name="admin-password-save" ><i class="icon-ok"></i>提交</a>
+           &nbsp;&nbsp;&nbsp;&nbsp;
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
+<script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+<!--<script type="text/javascript" src="__HUILIB__/js/Validform_v5.3.2_min.js"></script> -->
+<script type="text/javascript" src="__HUILIB__/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__HUI__/js/H-ui.js"></script>
+<script type="text/javascript" src="__HUIADMIN__/js/H-ui.admin.js"></script>
+<script type="text/javascript">
+//$(".Huiform").Validform();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F080836300300be57b7f34f4b3e97d911' type='text/javascript'%3E%3C/script%3E"));
+function code_generate(){
+  $.ajax({
+    type:'post',
+    url:'<?php echo url('admin/Enterprise/getCode')?>',
+    dataType:'json',
+    success:function(data){
+      $("#code").val(data.code);
+    },
+    error:function(data){
+      layer.msg('生成出错',{code:5,time:1000});
+    }
+  });
+}
+function submit(){
+  $.ajax({
+    type:'post',
+    url:'<?php echo url('admin/Enterprise/enterpriseAdd')?>',
+    data:$("form").serialize(),
+    dataType:'json',
+    success:function(data){
+      $("#promptInfo").append("<font color='blue'>"+data.msg+"</font>");
+      setTimeout(removeInfo,1000);
+      function removeInfo(){
+        $("#promptInfo").children("font").remove();
+      }
+    },
+    error:function(data){
+      $("#promptInfo").append("<font color='red'>"+data.msg+"</font>");
+    }
+  });
+}
+</script>
+</body>
+</html>
